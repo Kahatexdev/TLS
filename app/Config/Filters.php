@@ -34,6 +34,9 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'area'  => \App\Filters\Area::class,
+        'kepalaarea'  => \App\Filters\KepalaArea::class,
+        'monitoring'  => \App\Filters\Monitoring::class,
     ];
 
     /**
@@ -103,5 +106,15 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        'area' => [
+            'before' => ['area/*'],
+        ],
+        'kepalaarea' => [
+            'before' => ['kepalaarea/*'],
+        ],
+        'monitoring' => [
+            'before' => ['monitoring/*'],
+        ],
+    ];
 }
