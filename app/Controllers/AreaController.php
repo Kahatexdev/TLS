@@ -21,7 +21,7 @@ class AreaController extends BaseController
     }
     public function dataproduksi()
     {
-        $produksi = dataproduksi();
+        // $produksi = produksi();
         $data = [
             'title' => 'TLS System',
             'active1' => '',
@@ -32,10 +32,10 @@ class AreaController extends BaseController
         return view('Area/Produksi/produksi', $data);
     }
 
-    private function dataproduksi()
+    function produksi()
     {
-        $data = $this->pro;
-        return
+        $data = 'sa';
+        return $data;
     }
     public function dataorder()
     {
