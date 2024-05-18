@@ -19,4 +19,34 @@ class AreaController extends BaseController
         ];
         return view('Area/index', $data);
     }
+    public function dataproduksi()
+    {
+        $produksi = dataproduksi();
+        $data = [
+            'title' => 'TLS System',
+            'active1' => '',
+            'active2' => 'active',
+            'active3' => '',
+
+        ];
+        return view('Area/Produksi/produksi', $data);
+    }
+
+    private function dataproduksi()
+    {
+        $data = $this->pro;
+        return
+    }
+    public function dataorder()
+    {
+
+        $data = [
+            'title' => 'TLS System',
+            'active1' => '',
+            'active2' => '',
+            'active3' => 'active',
+
+        ];
+        return view('Area/order/order', $data);
+    }
 }

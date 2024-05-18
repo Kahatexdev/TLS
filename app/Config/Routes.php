@@ -22,5 +22,7 @@ $routes->group('/monitoring', ['filter' => 'monitoring'], function ($routes) {
 });
 
 $routes->group('/area', ['filter' => 'area'], function ($routes) {
-    $routes->get('', 'MonitoringController::index');
+    $routes->get('', 'AreaController::index');
+    $routes->get('dataproduksi', 'AreaController::dataproduksi');
+    $routes->get('dataorder', 'AreaController::dataorder');
 });
