@@ -54,7 +54,7 @@ class UserModel extends Model
         }
 
         return [
-            'id' => $user['id_user'],
+            'id_user' => $user['id_user'],
             'role' => $user['role'],
             'username' => $user['username']
         ];

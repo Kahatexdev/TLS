@@ -1,4 +1,4 @@
-<?php $this->extend('Area/layout'); ?>
+<?php $this->extend('Monitoring/layout'); ?>
 <?php $this->section('content'); ?>
 <div class="container-fluid py-4">
     <?php if (session()->getFlashdata('success')) : ?>
@@ -25,47 +25,7 @@
         </script>
     <?php endif; ?>
 
-    <div class="row">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card pb-0">
-                    <div class="card-header d-flex justify-content-between">
-                        <h5>
-                            Import Database Order
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
 
-                                <div id="drop-area" class="border rounded d-flex justify-content-center align-item-center mx-3" style="height:200px; width: 100%; cursor:pointer;">
-                                    <div class="text-center mt-5">
-                                        <i class="fas fa-upload" style="font-size: 48px;"></i>
-
-                                        <p class=" mt-3" style="font-size: 28px;">
-                                            Upload file here
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-12 pl-0">
-
-                                <form action="<?= base_url('area/importorder') ?>" method="post" enctype="multipart/form-data">
-                                    <input type="file" id="fileInput" name="excel_file" multiple accept=".xls , .xlsx" class="form-control mx-3">
-                                    <button type="submit" class="btn btn-primary btn-block w-100 mx-3"> Simpan</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
 
     <div class="row mt-4">
         <div class="col-xl-12 col-sm-12 mb-xl-0 mb-4 mt-2">
@@ -88,6 +48,7 @@
                                 <th>Syle Size</th>
                                 <th>Sisa Order</th>
                                 <th>Jarum</th>
+                                <th>Acion</th>
                             </thead>
                             <tbody>
                                 <?php foreach ($order as $order) : ?>
@@ -98,6 +59,14 @@
                                         <td><?= $order['style_size'] ?></td>
                                         <td><?= $order['qty_po'] ?> Pcs</td>
                                         <td><?= $order['jarum'] ?> </td>
+                                        <td class="text-sm">
+                                            <button type="button" class="btn btn-info btn-sm edit-btn" id="edit-btn" data-inisial="<?= $order['inisial']; ?>" data-style="<?= $order['style_size']; ?>" data-id="<?= $order['id_inisial']; ?>" data-toggle="modal" data-qty="<?= $order['qty_po']; ?>" data-jarum="<?= $order['jarum']; ?>">
+                                                Edit
+                                            </button>
+                                            <button class="btn btn-danger delete-btn" id="delete-btn" data-id="<?= $order['id_inisial']; ?>">
+                                                Delete
+                                            </button>
+                                        </td>
                                     </tr>
                                 <?php endforeach ?>
                             </tbody>
@@ -107,7 +76,82 @@
             </div>
         </div>
     </div>
+    <!-- modal edit -->
+    <div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="ModalEdit" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Data Produksi</h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body align-items-center">
 
+                    <div class="row mt-2">
+                        <div class="col-12 pl-0">
+                            <form action="<?= base_url('area/inputproduksi') ?>" id="modalForm" method="POST" enctype="multipart/form-data">
+
+                                <div class="form-group">
+                                    <label for="seam" class="col-form-label">Inisial:</label>
+                                    <input type="text" name="inisial" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="seam" class="col-form-label">style:</label>
+                                    <input type="text" name="style" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="seam" class="col-form-label">Sisa Order:</label>
+                                    <input type="number" name="qty" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="seam" class="col-form-label">Jarum:</label>
+                                    <input type="number" name="jarum" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                </div>
+
+
+
+                                <button type="submit" class="btn btn-info btn-block w-100"> Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- modal delete -->
+    <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="ModalDelete" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Data Produksi</h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body align-items-center">
+
+                    <div class="row mt-2">
+                        <div class="col-12 pl-0">
+                            <form action="<?= base_url('area/inputproduksi') ?>" id="modalForm" method="POST" enctype="multipart/form-data">
+
+                                Anda yakin ingin menghapus data?
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="submit" class="btn btn-danger btn-block w-100"> Hapus</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 <script src="<?= base_url('assets/js/plugins/chartjs.min.js') ?>"></script>
 <script type="text/javascript">
@@ -128,6 +172,27 @@
             $('#importModal').find('input[name="no_model"]').val(noModel);
 
             $('#importModal').modal('show'); // Show the modal
+        });
+        $('.delete-btn').click(function() {
+            var id = $(this).data('id');
+            $('#ModalDelete').find('form').attr('action', '<?= base_url('monitoring/deleteproduksi/') ?>' + id);
+
+            $('#ModalDelete').modal('show'); // Show the modal
+        });
+
+        $('.edit-btn').click(function() {
+            var id = $(this).data('id');
+            var jarum = $(this).data('jarum');
+            var qty = $(this).data('qty');
+            var style = $(this).data('style');
+            var inisial = $(this).data('inisial');
+
+            $('#ModalEdit').find('form').attr('action', '<?= base_url('monitoring/editorder/') ?>' + id);
+            $('#ModalEdit').find('input[name="qty"]').val(qty);
+            $('#ModalEdit').find('input[name="style"]').val(style);
+            $('#ModalEdit').find('input[name="jarum"]').val(jarum);
+            $('#ModalEdit').find('input[name="inisial"]').val(inisial);
+            $('#ModalEdit').modal('show'); // Show the modal
         });
     });
 </script>

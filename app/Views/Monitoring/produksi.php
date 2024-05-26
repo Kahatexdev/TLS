@@ -1,4 +1,4 @@
-<?php $this->extend('Area/layout'); ?>
+<?php $this->extend('Monitoring/layout'); ?>
 <?php $this->section('content'); ?>
 <div class="container-fluid py-4">
     <div class="row my-4">
@@ -46,6 +46,7 @@
                                 <th>Syle Size</th>
                                 <th>Qty produksi</th>
                                 <th>Bs produksi</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,6 +60,14 @@
                                     <td class="text-sm"><?= $pr['style_size']; ?></td>
                                     <td class="text-sm"><?= $pr['qty_production']; ?></td>
                                     <td class="text-sm"><?= $pr['bs_mc']; ?></td>
+                                    <td class="text-sm">
+                                        <button type="button" class="btn btn-info btn-sm edit-btn" id="edit-btn" data-qty="<?= $pr['qty_production']; ?>" data-bs="<?= $pr['bs_mc']; ?>" data-id="<?= $pr['id_production']; ?>" data-toggle="modal">
+                                            Edit
+                                        </button>
+                                        <button class="btn btn-danger delete-btn" id="delete-btn" data-id="<?= $pr['id_production']; ?>">
+                                            Delete
+                                        </button>
+                                    </td>
 
 
                                 </tr>
@@ -145,6 +154,74 @@
             </div>
         </div>
     </div>
+    <!-- modal edit -->
+    <div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="ModalEdit" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Data Produksi</h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body align-items-center">
+
+                    <div class="row mt-2">
+                        <div class="col-12 pl-0">
+                            <form action="<?= base_url('area/inputproduksi') ?>" id="modalForm" method="POST" enctype="multipart/form-data">
+
+                                <div class="form-group">
+                                    <label for="seam" class="col-form-label">Qty Produksi:</label>
+                                    <input type="number" name="qty" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="seam" class="col-form-label">Bs Produksi:</label>
+                                    <input type="number" name="bs" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                </div>
+
+
+
+                                <button type="submit" class="btn btn-info btn-block w-100"> Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- modal delete -->
+    <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="ModalDelete" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Data Produksi</h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body align-items-center">
+
+                    <div class="row mt-2">
+                        <div class="col-12 pl-0">
+                            <form action="<?= base_url('area/inputproduksi') ?>" id="modalForm" method="POST" enctype="multipart/form-data">
+
+                                Anda yakin ingin menghapus data?
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="submit" class="btn btn-danger btn-block w-100"> Hapus</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <script src="<?= base_url('assets/js/plugins/chartjs.min.js') ?>"></script>
     <script type="text/javascript">
@@ -153,6 +230,23 @@
             $('.import-btn').click(function() {
 
                 $('#importModal').modal('show'); // Show the modal
+            });
+            $('.delete-btn').click(function() {
+                var id = $(this).data('id');
+                $('#ModalDelete').find('form').attr('action', '<?= base_url('monitoring/deleteproduksi/') ?>' + id);
+
+                $('#ModalDelete').modal('show'); // Show the modal
+            });
+
+            $('.edit-btn').click(function() {
+                var id = $(this).data('id');
+                var qty = $(this).data('qty');
+                var bs = $(this).data('bs');
+
+                $('#ModalEdit').find('form').attr('action', '<?= base_url('monitoring/editproduksi/') ?>' + id);
+                $('#ModalEdit').find('input[name="qty"]').val(qty);
+                $('#ModalEdit').find('input[name="bs"]').val(bs);
+                $('#ModalEdit').modal('show'); // Show the modal
             });
 
             $('#example').DataTable({

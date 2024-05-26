@@ -25,6 +25,7 @@ class AuthController extends BaseController
         } else {
             if (password_verify($password, $userData['password'])) {
                 session()->set('username', $userData['username']);
+                session()->set('id_user', $userData['id_user']);
                 session()->set('role', $userData['role']);
                 switch ($userData['role']) {
                     case 'area':

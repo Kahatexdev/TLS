@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ProduksiModel extends Model
+class InisialModel extends Model
 {
-    protected $table            = 'productions';
-    protected $primaryKey       = 'id_production';
+    protected $table            = 'inisials';
+    protected $primaryKey       = 'id_inisial';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_production', 'id_inisial', 'date_production', 'qty_production', 'run_mc', 'bs_mc', 'id_user'];
+    protected $allowedFields    = ['id_inisial', 'id_order', 'area', 'inisial', 'style_size', 'qty_po', 'jarum'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -44,12 +44,22 @@ class ProduksiModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-
-
+    public function checkInisial($data)
+    {
+        return $this->where('inisial', $data['inisial'])
+            ->where('style_size', $data['style_size'])
+            ->first();
+    }
+    public function getId($data)
+    {
+        return $this->select('id_inisial,qty_po')
+            ->where('id_order', $data['id_order'])
+            ->where('inisial', $data['inisial'])
+            ->first();
+    }
     public function getdata()
     {
-        return $this->select('productions.id_production,productions.date_production,productions.qty_production,productions.run_mc,productions.bs_mc, orders.no_model, inisials.inisial, inisials.area, inisials.style_size,productions.bs_mc')
-            ->join('inisials', 'inisials.id_inisial=productions.id_inisial')
+        return $this->select('inisials.id_inisial,inisials.area, inisials.inisial, inisials.style_size,inisials.jarum, inisials.qty_po,orders.no_model, orders.buyer')
             ->join('orders', 'orders.id_order=inisials.id_order')
             ->findAll();
     }

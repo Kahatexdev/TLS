@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ProduksiModel extends Model
+class OrderModel extends Model
 {
-    protected $table            = 'productions';
-    protected $primaryKey       = 'id_production';
+    protected $table            = 'orders';
+    protected $primaryKey       = 'id_order';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_production', 'id_inisial', 'date_production', 'qty_production', 'run_mc', 'bs_mc', 'id_user'];
+    protected $allowedFields    = ['id_order', 'no_model', 'order_qty', 'buyer', 'order_category', 'start_mc', 'delivery'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -36,6 +36,7 @@ class ProduksiModel extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
+
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -44,13 +45,18 @@ class ProduksiModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-
-
-    public function getdata()
+    public function check($data)
     {
-        return $this->select('productions.id_production,productions.date_production,productions.qty_production,productions.run_mc,productions.bs_mc, orders.no_model, inisials.inisial, inisials.area, inisials.style_size,productions.bs_mc')
-            ->join('inisials', 'inisials.id_inisial=productions.id_inisial')
-            ->join('orders', 'orders.id_order=inisials.id_order')
-            ->findAll();
+        return $this->where('no_model', $data['no_model'])->first();
+    }
+    public function getId($no_model)
+    {
+        return $this->select('id_order')->where('no_model', $no_model)->first();
+    }
+    public function getModel($data)
+    {
+        $id = $this->select('id_order')->where('no_model', $data)->first();
+        $result = reset($id);
+        return $result;
     }
 }
