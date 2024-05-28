@@ -112,7 +112,12 @@
                             <form action="<?= base_url('area/inputproduksi') ?>" id="modalForm" method="POST" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="seam" class="col-form-label">No Model:</label>
-                                    <input type="text" name="no_model" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                    <select class="form-control" id="productType" name="no_model">
+                                        <option>Choose</option>
+                                        <?php foreach ($model as $pr) : ?>
+                                            <option><?= $pr['no_model'] ?></option>
+                                        <?php endforeach ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="seam" class="col-form-label">Inisial:</label>

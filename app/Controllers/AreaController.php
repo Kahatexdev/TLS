@@ -36,13 +36,15 @@ class AreaController extends BaseController
     }
     public function dataproduksi()
     {
+        $model = $this->ordermodel->getpdk();
         $produksi = $this->produksimodel->getdata();
         $data = [
             'title' => 'TLS System',
             'active1' => '',
             'active2' => 'active',
             'active3' => '',
-            'produksi' => $produksi
+            'produksi' => $produksi,
+            'model' => $model
 
         ];
         return view('Area/Produksi/produksi', $data);

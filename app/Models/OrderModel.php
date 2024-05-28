@@ -59,4 +59,8 @@ class OrderModel extends Model
         $result = reset($id);
         return $result;
     }
+    public function getpdk()
+    {
+        return $this->select('no_model')->findAll();
+    }
 }
