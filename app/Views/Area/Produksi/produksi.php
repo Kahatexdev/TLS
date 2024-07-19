@@ -72,7 +72,7 @@
     </div>
     <?php if (session()->getFlashdata('success')) : ?>
         <script>
-            $(document).ready(function() {
+            $(function() {
                 Swal.fire({
                     icon: 'success',
                     title: 'Success!',
@@ -84,7 +84,7 @@
 
     <?php if (session()->getFlashdata('error')) : ?>
         <script>
-            $(document).ready(function() {
+            $(function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -121,15 +121,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="seam" class="col-form-label">Inisial:</label>
-                                    <input type="text" name="inisial" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                    <input type="text" name="id_inisial" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
                                 </div>
                                 <div class="form-group">
                                     <label for="seam" class="col-form-label">Qty Produksi:</label>
-                                    <input type="number" name="qty" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                    <input type="number" name="qty_production" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
                                 </div>
                                 <div class="form-group">
                                     <label for="seam" class="col-form-label">Bs Produksi:</label>
-                                    <input type="number" name="bs" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                    <input type="number" name="bs_mc" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
                                 </div>
                                 <div class="form-group">
                                     <label for="seam" class="col-form-label">Tanggal Produksi:</label>
@@ -137,7 +137,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="seam" class="col-form-label">Run Mesin:</label>
-                                    <input type="number" name="runmc" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                    <input type="number" name="run_mc" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
                                 </div>
 
                                 <button type="submit" class="btn btn-info btn-block w-100"> Simpan</button>

@@ -8,12 +8,14 @@ use CodeIgniter\HTTP\ResponseInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\OrderModel;
 use App\Models\ProduksiModel;
+use Config\Redis;
 
 class AreaController extends BaseController
 {
     protected $ordermodel;
     protected $inisialmodel;
     protected $produksimodel;
+    protected $redis;
 
     public function __construct()
     {
@@ -21,6 +23,7 @@ class AreaController extends BaseController
         $this->produksimodel = new ProduksiModel();
         $this->ordermodel = new OrderModel();
         $this->inisialmodel = new InisialModel();
+        $this->redis = \Config\Services::redis();
     }
     public function index()
     {
@@ -70,10 +73,9 @@ class AreaController extends BaseController
     }
     public function inputproduksi()
     {
-
         $no_model = $this->request->getPost('no_model');
         $idorder = $this->ordermodel->getModel($no_model);
-        $inisial = $this->request->getPost('inisial');
+        $inisial = $this->request->getPost('id_inisial');
         $getId = [
             'id_order' => $idorder,
             'inisial' => $inisial
@@ -87,24 +89,23 @@ class AreaController extends BaseController
         $user = session()->get('id_user');
 
         $date = $this->request->getPost('date');
-        $qty = $this->request->getPost('qty');
-        $bs = $this->request->getPost('bs');
-        $runmc = $this->request->getPost('runmc');
+        $qty = $this->request->getPost('qty_production');
+        $bs = $this->request->getPost('bs_mc');
+        $runmc = $this->request->getPost('run_mc');
         $data = [
             'id_inisial' => $idInisial,
             'date_production' => $date,
             'qty_production' => $qty,
             'run_mc' => $runmc,
             'bs_mc' => $bs,
-            'id_user' => $user
+            'id_user' => $user,
+            'sisa' => $qtyorder - $qty
         ];
-        $sisa = $qtyorder - $qty;
 
-        $insert = $this->produksimodel->insert($data);
-        if ($insert) {
-            $this->inisialmodel->update($idInisial, ['qty_po' => $sisa]);
-            return redirect()->to(base_url('/area/dataproduksi'))->with('success', 'Data produksi berhasil di input');
-        }
+        $key = 'data_produksi_' . uniqid();
+        $this->redis->set($key, json_encode($data));
+        $this->checkDataRedis();
+        return redirect()->to(base_url('/area/dataproduksi'))->with('success', 'Data produksi berhasil di input');
     }
     function importorder()
     {
@@ -173,6 +174,24 @@ class AreaController extends BaseController
         } else {
 
             return redirect()->to(base_url('/area/dataorder'))->with('error', 'No data found in the Excel file');
+        }
+    }
+
+    public function checkDataRedis()
+    {
+        $keys = $this->redis->keys('data_produksi_*');
+
+        foreach ($keys as $key) {
+            $ttl = $this->redis->executeRaw(['OBJECT', 'IDLETIME', $key]);
+            if ($ttl >= 1800) {
+                $data = json_decode($this->redis->get($key), true);
+                if ($this->produksimodel->insert($data)) {
+                    $this->inisialmodel->update($data['id_inisial'], ['qty_po' => $data['sisa']]);
+                    $this->redis->del($key);
+                } else {
+                    $this->checkDataRedis();
+                }
+            }
         }
     }
 }

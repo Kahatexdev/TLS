@@ -4,6 +4,8 @@ namespace Config;
 
 use CodeIgniter\Config\BaseService;
 
+use Predis\Client;
+
 /**
  * Services Configuration file.
  *
@@ -29,4 +31,18 @@ class Services extends BaseService
      *     return new \CodeIgniter\Example();
      * }
      */
+
+    public static function redis(bool $getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('redis');
+        }
+
+        $config = config('Redis');
+        return new Client([
+            'scheme' => 'tcp',
+            'host'   => $config->host,
+            'port'   => $config->port,
+        ]);
+    }
 }
