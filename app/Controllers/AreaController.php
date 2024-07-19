@@ -181,6 +181,7 @@ class AreaController extends BaseController
     {
         $keys = $this->redis->keys('data_produksi_*');
 
+        $count = 0;
         foreach ($keys as $key) {
             $ttl = $this->redis->executeRaw(['OBJECT', 'IDLETIME', $key]);
             if ($ttl >= 1800) {
@@ -188,10 +189,24 @@ class AreaController extends BaseController
                 if ($this->produksimodel->insert($data)) {
                     $this->inisialmodel->update($data['id_inisial'], ['qty_po' => $data['sisa']]);
                     $this->redis->del($key);
-                } else {
-                    $this->checkDataRedis();
+                    $count++;
                 }
             }
+        }
+
+        if ($count > 0) {
+            $response = [
+                'status' => 'success',
+                'code' => 200
+            ];
+
+            return json_encode($response);
+        } else {
+            $response = [
+                'status' => 'success, belum ada data',
+                'code' => 201
+            ];
+            return json_encode($response);
         }
     }
 }

@@ -154,6 +154,8 @@
     <script src="<?= base_url('assets/js/plugins/chartjs.min.js') ?>"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+            checkDataRedis()
+
             // Trigger import modal when import button is clicked
             $('.import-btn').click(function() {
 
@@ -164,5 +166,21 @@
                 "order": []
             });
         });
+
+        function checkDataRedis() {
+            $.ajax({
+                url: 'checkDataRedis',
+                method: 'GET',
+                dataType: 'json',
+                success: (response) => {
+                    if (response.code == 200) {
+                        checkDataRedis()
+                        location.reload()
+                    } else {
+                        checkDataRedis()
+                    }
+                }
+            })
+        }
     </script>
     <?php $this->endSection(); ?>

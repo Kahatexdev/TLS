@@ -32,5 +32,6 @@ $routes->group('/area', ['filter' => 'area'], function ($routes) {
     $routes->get('dataproduksi', 'AreaController::dataproduksi');
     $routes->post('inputproduksi', 'AreaController::inputproduksi');
     $routes->get('dataorder', 'AreaController::dataorder');
+    $routes->get('checkDataRedis', 'AreaController::checkDataRedis');
     $routes->post('importorder', 'AreaController::importorder');
 });
