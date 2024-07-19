@@ -29,7 +29,7 @@
     <link href="<?= base_url('assets/css/dataTables.dataTables.css') ?>" rel="stylesheet">
     <script src="<?= base_url('assets/js/dataTables.min.js') ?>"></script>
     <link href="<?= base_url('assets/css/select2.min.css') ?>" rel="stylesheet" />
-    <link href="<?= base_url('assets/node_modules/sweetalert2/dist/sweetalert2.min.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/node_modules/sweetalert2/src/sweetalert2.scss') ?>" rel="stylesheet">
 
 
 </head>
@@ -432,7 +432,6 @@
             },
         });
     </script>
-    <script src="<?= base_url('assets/node_modules/sweetalert2/dist/sweetalert2.min.js') ?>"></script>
 
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
@@ -442,6 +441,27 @@
             }
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
+
+        $(function() {
+            checkDataRedis()
+
+            function checkDataRedis() {
+                $.ajax({
+                    url: 'checkDataRedis',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: (response) => {
+                        if (response.code == 200 && window.location.pathname == '/area/dataproduksi') {
+                            location.reload()
+                        } else {
+                            setTimeout(() => {
+                                checkDataRedis()
+                            }, 5000)
+                        }
+                    }
+                })
+            }
+        })
     </script>
     <!-- Github buttons -->
     <script async defer src="<?= base_url('assets/js/buttons.js') ?>"></script>
