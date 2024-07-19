@@ -104,7 +104,6 @@ class AreaController extends BaseController
 
         $key = 'data_produksi_' . uniqid();
         $this->redis->set($key, json_encode($data));
-        $this->checkDataRedis();
         return redirect()->to(base_url('/area/dataproduksi'))->with('success', 'Data produksi berhasil di input');
     }
     function importorder()
