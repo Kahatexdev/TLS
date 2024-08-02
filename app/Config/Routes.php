@@ -11,6 +11,7 @@ $routes->get('/', 'AuthController::index');
 $routes->get('/login', 'AuthController::index');
 $routes->post('/logout', 'AuthController::logout');
 $routes->post('authverify', 'AuthController::login');
+$routes->get('checkDataRedis', 'AreaController::checkDataRedis');
 
 $routes->group('/kepalaarea', ['filter' => 'kepalaarea'], function ($routes) {
     $routes->get('', 'KepalaAreaController::index');
