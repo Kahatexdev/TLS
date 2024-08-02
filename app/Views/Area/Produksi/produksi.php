@@ -113,15 +113,15 @@
                                 <div class="form-group">
                                     <label for="seam" class="col-form-label">No Model:</label>
                                     <select class="form-control" id="productType" name="no_model">
-                                        <option>Choose</option>
+                                        <option value="0">Choose</option>
                                         <?php foreach ($model as $pr) : ?>
-                                            <option><?= $pr['no_model'] ?></option>
+                                            <option value="<?= $pr['id_order'] ?>"><?= $pr['no_model'] ?></option>
                                         <?php endforeach ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="seam" class="col-form-label">Inisial:</label>
-                                    <input type="text" name="id_inisial" id="" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                    <select class="form-control" id="id_inisial" name="id_inisial"></select>
                                 </div>
                                 <div class="form-group">
                                     <label for="seam" class="col-form-label">Qty Produksi:</label>
@@ -151,6 +151,10 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="<?= base_url('assets/js/dataTables.buttons.js') ?>"></script>
+    <script type="text/javascript" src="<?= base_url('assets/js/jszip.min.js') ?>"></script>
+    <script type="text/javascript" src="<?= base_url('assets/js/buttons.html5.min.js') ?>"></script>
+
     <script src="<?= base_url('assets/js/plugins/chartjs.min.js') ?>"></script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -160,9 +164,36 @@
                 $('#importModal').modal('show'); // Show the modal
             });
 
-            $('#example').DataTable({
-                "order": []
+            new DataTable('#example', {
+                layout: {
+                    top1Start: {
+                        buttons: [{
+                            extend: 'excel',
+                            text: 'Export To Excel',
+                            className: 'btn btn-success btn-sm'
+                        }]
+                    }
+                }
             });
         });
+
+        $('#productType').change(() => {
+            $.ajax({
+                url: 'getInitialByModel',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    id_order: $('#productType').val()
+                },
+                success: (data) => {
+                    $('#id_inisial').html('')
+                    var html = ""
+                    data.map((item) => {
+                        html += `<option value="${item.id_inisial}">${item.inisial}</option>`
+                    })
+                    $('#id_inisial').html(html)
+                }
+            })
+        })
     </script>
     <?php $this->endSection(); ?>

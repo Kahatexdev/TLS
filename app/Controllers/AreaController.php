@@ -74,7 +74,7 @@ class AreaController extends BaseController
     public function inputproduksi()
     {
         $no_model = $this->request->getPost('no_model');
-        $idorder = $this->ordermodel->getModel($no_model);
+        $idorder = $this->request->getPost('no_model');
         $inisial = $this->request->getPost('id_inisial');
         $getId = [
             'id_order' => $idorder,
@@ -131,7 +131,7 @@ class AreaController extends BaseController
                     $ordercat = $data[5];
                     $startmc = $data[8];
                     $delivery = $data[9];
-                    $qtyorder =  $data[6];
+                    $qtyorder = $data[6];
 
                     $dataorder = [
                         'no_model' => $no_model,
@@ -176,6 +176,14 @@ class AreaController extends BaseController
         }
     }
 
+    public function getInitialByModel()
+    {
+        $id_order = $_POST['id_order'];
+        $inisial = $this->inisialmodel->getByOrder($id_order);
+
+        return json_encode($inisial);
+    }
+
     public function checkDataRedis()
     {
         $keys = $this->redis->keys('data_produksi_*');
@@ -183,7 +191,7 @@ class AreaController extends BaseController
         $count = 0;
         foreach ($keys as $key) {
             $ttl = $this->redis->executeRaw(['OBJECT', 'IDLETIME', $key]);
-            if ($ttl >= 1800) {
+            if ($ttl >= 60) {
                 $data = json_decode($this->redis->get($key), true);
                 if ($this->produksimodel->insert($data)) {
                     $this->inisialmodel->update($data['id_inisial'], ['qty_po' => $data['sisa']]);

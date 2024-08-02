@@ -54,7 +54,7 @@ class InisialModel extends Model
     {
         return $this->select('id_inisial,qty_po')
             ->where('id_order', $data['id_order'])
-            ->where('inisial', $data['inisial'])
+            ->where('id_inisial', $data['inisial'])
             ->first();
     }
     public function getdata()
@@ -62,5 +62,13 @@ class InisialModel extends Model
         return $this->select('inisials.id_inisial,inisials.area, inisials.inisial, inisials.style_size,inisials.jarum, inisials.qty_po,orders.no_model, orders.buyer')
             ->join('orders', 'orders.id_order=inisials.id_order')
             ->findAll();
+    }
+    public function getByOrder($id_order)
+    {
+        $query = $this->select('id_inisial, inisial');
+        if ($id_order !== 0) {
+            $query = $query->where('id_order', $id_order);
+        }
+        return $query->findAll();
     }
 }

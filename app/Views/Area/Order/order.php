@@ -54,9 +54,10 @@
                             <div class="col-12 pl-0">
 
                                 <form action="<?= base_url('area/importorder') ?>" method="post" enctype="multipart/form-data">
-                                    <input type="file" id="fileInput" name="excel_file" multiple accept=".xls , .xlsx" class="form-control mx-3">
-                                    <button type="submit" class="btn btn-primary btn-block w-100 mx-3"> Simpan</button>
+                                    <input type="file" id="fileInput" name="excel_file" class="form-control mx-3">
+                                    <button type="submit" class="btn btn-primary btn-block w-100 mx-3">Simpan</button>
                                 </form>
+
                             </div>
                         </div>
                     </div>

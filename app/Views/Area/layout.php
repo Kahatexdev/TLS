@@ -29,7 +29,7 @@
     <link href="<?= base_url('assets/css/dataTables.dataTables.css') ?>" rel="stylesheet">
     <script src="<?= base_url('assets/js/dataTables.min.js') ?>"></script>
     <link href="<?= base_url('assets/css/select2.min.css') ?>" rel="stylesheet" />
-    <link href="<?= base_url('assets/node_modules/sweetalert2/src/sweetalert2.scss') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/css/sweetalert2.css') ?>" rel="stylesheet">
 
 
 </head>
@@ -432,6 +432,8 @@
             },
         });
     </script>
+
+    <script src="<?= base_url('assets/js/sweetalert2.js') ?>"></script>
 
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
