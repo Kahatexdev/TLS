@@ -36,4 +36,5 @@ $routes->group('/area', ['filter' => 'area'], function ($routes) {
     $routes->get('checkDataRedis', 'AreaController::checkDataRedis');
     $routes->post('importorder', 'AreaController::importorder');
     $routes->post('getInitialByModel', 'AreaController::getInitialByModel');
+    $routes->post('importproduction', 'AreaController::importproduction');
 });

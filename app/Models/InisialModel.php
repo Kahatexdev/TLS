@@ -50,6 +50,7 @@ class InisialModel extends Model
             ->where('style_size', $data['style_size'])
             ->first();
     }
+
     public function getId($data)
     {
         return $this->select('id_inisial,qty_po')
@@ -57,6 +58,14 @@ class InisialModel extends Model
             ->where('id_inisial', $data['inisial'])
             ->first();
     }
+
+    public function getIdInisial($inisial)
+    {
+        return $this->select('id_inisial')
+            ->where('inisial', $inisial)
+            ->first();
+    }
+
     public function getdata()
     {
         return $this->select('inisials.id_inisial,inisials.area, inisials.inisial, inisials.style_size,inisials.jarum, inisials.qty_po,orders.no_model, orders.buyer')

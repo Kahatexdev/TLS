@@ -71,6 +71,7 @@ class AreaController extends BaseController
         ];
         return view('Area/order/order', $data);
     }
+
     public function inputproduksi()
     {
         $no_model = $this->request->getPost('no_model');
@@ -106,6 +107,78 @@ class AreaController extends BaseController
         $this->redis->set($key, json_encode($data));
         return redirect()->to(base_url('/area/dataproduksi'))->with('success', 'Data produksi berhasil di input');
     }
+
+    function importproduction()
+    {
+        $file = $this->request->getFile('excel_file');
+        if ($file->isValid() && !$file->hasMoved()) {
+            $spreadsheet = IOFactory::load($file);
+            $data = $spreadsheet->getActiveSheet();
+            $startRow = 2;
+
+            foreach ($spreadsheet->getActiveSheet()->getRowIterator($startRow) as $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(false);
+                $data = [];
+
+                foreach ($cellIterator as $cell) {
+                    $data[] = $cell->getValue();
+                }
+
+                if ($data[2] == null) {
+                    break;
+                }
+
+                if (!empty($data)) {
+                    $id_order = $this->ordermodel->getId($data[0])['id_order'];
+                    $id_inisial = $this->inisialmodel->getIdInisial($data[1])['id_inisial'];
+                    $qty_production = $data[2];
+                    $bs_mc = $data[3];
+                    $date = $data[4];
+                    $run_mc = $data[5];
+
+                    $no_model = $id_order;
+                    $idorder = $id_order;
+                    $inisial = $id_inisial;
+                    $getId = [
+                        'id_order' => $idorder,
+                        'inisial' => $inisial
+                    ];
+                    $inisial = $this->inisialmodel->getId($getId);
+                    if (!$inisial) {
+                        return redirect()->to(base_url('/area/dataproduksi'))->with('error', 'Data Model tidak ditemukan');
+                    }
+                    $idInisial = $inisial['id_inisial'];
+                    $qtyorder = $inisial['qty_po'];
+                    $user = session()->get('id_user');
+
+                    $date = $date;
+                    $qty = $qty_production;
+                    $bs = $bs_mc;
+                    $runmc = $run_mc;
+                    $data = [
+                        'id_inisial' => $idInisial,
+                        'date_production' => $date,
+                        'qty_production' => $qty,
+                        'run_mc' => $runmc,
+                        'bs_mc' => $bs,
+                        'id_user' => $user,
+                        'sisa' => $qtyorder - $qty
+                    ];
+
+                    $key = 'data_produksi_' . uniqid();
+                    $this->redis->set($key, json_encode($data));
+                } else {
+                    return redirect()->to(base_url('/area/dataproduksi'))->with('error', 'No data found in the Excel file');
+                }
+            }
+
+            return redirect()->to(base_url('/area/dataproduksi'))->with('success', 'Data berhasil di import');
+        } else {
+            return redirect()->to(base_url('/area/dataproduksi'))->with('error', 'No data found in the Excel file');
+        }
+    }
+
     function importorder()
     {
         $file = $this->request->getFile('excel_file');

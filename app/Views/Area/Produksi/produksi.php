@@ -32,6 +32,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
+                    <form action="<?= base_url('area/importproduction') ?>" id="form-import" method="POST" enctype="multipart/form-data">
+                        <input type="file" id="importInput" accept=".xlsx" name="excel_file" style="display: none;">
+                    </form>
                     <table id="example" class="display compact " style="width:100%">
                         <thead>
                             <tr>
@@ -172,9 +175,24 @@
                             text: 'Export To Excel',
                             className: 'btn btn-success btn-sm'
                         }]
+                    },
+                    top1End: {
+                        buttons: [{
+                            text: 'Import Data',
+                            className: 'btn btn-success btn-sm btn_import'
+                        }]
                     }
                 }
             });
+
+            $('.btn_import').click(async (e) => {
+                e.preventDefault();
+                $('#importInput')[0].click();
+            })
+        });
+
+        $('#importInput').change(() => {
+            $('#form-import').submit();
         });
 
         $('#productType').change(() => {
