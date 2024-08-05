@@ -59,10 +59,11 @@ class InisialModel extends Model
             ->first();
     }
 
-    public function getIdInisial($inisial)
+    public function getIdInisial($inisial, $id_order)
     {
         return $this->select('id_inisial')
             ->where('inisial', $inisial)
+            ->where('id_order', $id_order)
             ->first();
     }
 

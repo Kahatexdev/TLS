@@ -131,7 +131,7 @@ class AreaController extends BaseController
 
                 if (!empty($data)) {
                     $id_order = $this->ordermodel->getId($data[0])['id_order'];
-                    $id_inisial = $this->inisialmodel->getIdInisial($data[1])['id_inisial'];
+                    $id_inisial = $this->inisialmodel->getIdInisial($data[1], $id_order)['id_inisial'];
                     $qty_production = $data[2];
                     $bs_mc = $data[3];
                     $date = $data[4];
